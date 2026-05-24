@@ -15,6 +15,15 @@ const categories = [
   { id: 'other', label: 'その他', emoji: '🎁' },
 ]
 
+function getLocalDemoResults(keyword: string) {
+  return [
+    { name: `${keyword}（白）`, brand: 'UNIQLO', imageUrl: '', productUrl: '#', price: 1990 },
+    { name: `${keyword}（黒）`, brand: 'GU', imageUrl: '', productUrl: '#', price: 2490 },
+    { name: `${keyword}（ネイビー）`, brand: 'Zara', imageUrl: '', productUrl: '#', price: 3990 },
+    { name: `${keyword}（ベージュ）`, brand: 'H&M', imageUrl: '', productUrl: '#', price: 2990 },
+  ]
+}
+
 const tpoOptions = ['casual', 'date', 'work', 'party', 'sport', 'formal']
 const tpoLabels: Record<string, string> = {
   casual: 'カジュアル', date: 'デート', work: '仕事',
@@ -43,9 +52,13 @@ export default function RegisterPage() {
     try {
       const res = await fetch(`/api/products/search?q=${encodeURIComponent(keyword)}`)
       const data = await res.json()
-      setSearchResults(data)
+      if (Array.isArray(data) && data.length > 0) {
+        setSearchResults(data)
+      } else {
+        setSearchResults(getLocalDemoResults(keyword))
+      }
     } catch {
-      setSearchResults([])
+      setSearchResults(getLocalDemoResults(keyword))
     } finally {
       setSearching(false)
     }
