@@ -1,17 +1,19 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import WeatherWidget from '@/components/WeatherWidget'
 import TPOSelector from '@/components/TPOSelector'
 import OutfitSuggestionCard from '@/components/OutfitSuggestionCard'
 import { ClothingItem } from '@/types/fashion'
 
-// Mock data for demo (replace with Supabase calls when auth is set up)
-const mockClothes: ClothingItem[] = []
-
 export default function HomePage() {
   const [tpo, setTpo] = useState('casual')
-  const [clothes] = useState<ClothingItem[]>(mockClothes)
+  const [clothes, setClothes] = useState<ClothingItem[]>([])
   const today = new Date().toLocaleDateString('ja-JP', { month: 'long', day: 'numeric', weekday: 'short' })
+
+  useEffect(() => {
+    const saved = JSON.parse(localStorage.getItem('clothes') || '[]')
+    setClothes(saved)
+  }, [])
 
   return (
     <div style={{ padding: '20px 16px' }}>

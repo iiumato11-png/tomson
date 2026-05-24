@@ -74,8 +74,21 @@ export default function RegisterPage() {
   const handleSave = async () => {
     if (!name.trim()) return
     setSaving(true)
-    // TODO: Save to Supabase when auth is implemented
-    await new Promise(r => setTimeout(r, 800))
+    const newItem = {
+      id: Date.now().toString(),
+      user_id: 'local',
+      name,
+      brand,
+      category,
+      color,
+      image_url: selected?.imageUrl || '',
+      tpo_tags: selectedTpo,
+      season_tags: [],
+      wear_count: 0,
+      created_at: new Date().toISOString(),
+    }
+    const existing = JSON.parse(localStorage.getItem('clothes') || '[]')
+    localStorage.setItem('clothes', JSON.stringify([...existing, newItem]))
     setSaved(true)
     setSaving(false)
     // Reset
